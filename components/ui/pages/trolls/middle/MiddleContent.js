@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import StorySection from "./story/StorySection";
+import React from 'react';
 import Post from "./post/Post";
 import CreatePost from './post/CreatePost';
 import { useQuery } from 'react-query';
@@ -35,14 +34,10 @@ const MiddleContent = () => {
         <>
             {
                 <div className="flex-grow h-screen overflow-y-auto mx-8 px-4 pt-3">
-                    {/* Story Section */}
-                    <StorySection />
-
                     {/* create post */}
                     <CreatePost />
 
                     {/* post Section */}
-                    {/* render this if and only if data is not null */}
                     {
                         data && data.trolls.map((troll, index) => {
                             return (

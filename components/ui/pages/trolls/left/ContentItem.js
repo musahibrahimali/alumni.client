@@ -7,14 +7,14 @@ const ContentItem = (props) => {
         <>
             {
                 !isLoading ?
-                    <li className='h-full w-full mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200'>
+                    <li className="h-full w-full mb-2 flex items-center justify-content cursor-pointer space-x-2 py-2 px-4 rounded-md hover:bg-gray-200">
                         <div>
                             <Image
-                                className='w-8 h-8 rounded-full'
+                                className="w-10 h-10 rounded-full"
                                 src={image}
-                                alt='user'
                                 width={40}
                                 height={40}
+                                alt='user'
                             />
                         </div>
                         <div>

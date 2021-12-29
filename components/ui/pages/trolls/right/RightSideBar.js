@@ -23,9 +23,11 @@ const RightSideBar = () => {
 
     return (
         <>
-            <div className="px-2 pt-3 h-screen max-w[600px] xl:min-w[300px]">
+            <div className="px-2 pt-3 h-full w-full">
                 <div className="w-full text-gray-600 border-b-2 pb-2 mb-2 border-gray-300">
-                    <p className="font-semibold mb-2">Your Streams</p>
+                    <p className="font-semibold mb-2">
+                        Your Streams
+                    </p>
                     <ul className="text-gray-500 text-sm flex flex-col justify-between">
                         <li className="h-8 mb-2 flex items-center justify-content cursor-pointer space-x-3 p-2 rounded-md hover:bg-gray-200 hover:text-blue-600">
                             <div>
@@ -79,6 +81,12 @@ const RightSideBar = () => {
                                 room="Odade3"
                                 image="https://static.xx.fbcdn.net/rsrc.php/v3/yR/r/tInzwsw2pVX.png"
                             />
+
+                            <div className="bg-error-bg px-4 py-2">
+                                <button className="text-white dark:text-gray-200 font-bold tracking-wider">
+                                    Create Room
+                                </button>
+                            </div>
                         </ul>
                     </div>
                 </div>

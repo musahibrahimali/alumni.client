@@ -10,7 +10,7 @@ import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfi
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import { createNewPost } from '../../../../../../components';
+import { createNewPost } from '../../../../../../utils/utils';
 import { InputField, Notification } from '../../../../../../components';
 import { useDropzone } from 'react-dropzone';
 import "emoji-mart/css/emoji-mart.css";
@@ -31,8 +31,6 @@ const PostForm = (props) => {
     // get user id from redux
     const user = useSelector((state) => state.user.user);
     const userId = user?.userId;
-    // form data
-    const formData = new FormData();
 
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         maxFiles: 10, // max number of files
@@ -145,6 +143,8 @@ const PostForm = (props) => {
     // create a new post
     const onSubmit = async (event) => {
         event.preventDefault();
+        // form data
+        const formData = new FormData();
         // check if none of the fields are empty
         if (input.trim() === "" && previewImages.length === 0 && previewVideos.length === 0) {
             setNotify({
@@ -181,7 +181,7 @@ const PostForm = (props) => {
                 removeMediaToPost();
                 setTimeout(() => {
                     setOpenPopUp(false);
-                }, 8000);
+                }, 5000);
             } else {
                 setNotify({
                     isOpen: true,

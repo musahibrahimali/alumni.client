@@ -5,7 +5,7 @@ import MoreHorizSharpIcon from '@mui/icons-material/MoreHorizSharp';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { Avatar } from '@mui/material';
 import moment from 'moment';
-import { commentOnPost, likePost } from '../../../../../components';
+import { commentOnPost, likePost } from '../../../../../utils/utils';
 import { InputField } from '../../../../../components';
 import { Picker } from 'emoji-mart';
 
