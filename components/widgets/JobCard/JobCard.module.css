@@ -1,0 +1,7 @@
+.apply{
+    @apply px-8 py-2 cursor-pointer mt-4 bg-green-500 hover:bg-green-300 text-gray-50 hover:text-gray-100;
+}
+
+.expired{
+    @apply px-8 py-2 cursor-not-allowed mt-4 bg-red-300 text-gray-50 text-gray-100;
+}
