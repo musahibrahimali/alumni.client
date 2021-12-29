@@ -6,7 +6,7 @@ const EventsComponents = () => {
         <div className="bg-events-color dark:bg-gray-900 dark:text-gray-100 px-12 py-24 flex flex-col justify-between items-center">
             <div className="flex flex-row justify-center items-center">
                 <select
-                    className="bg-white focus:border-indigo-600 dark:bg-gray-900 mx-4 border border-indigo-600 px-8 py-4 focus:border-border-indigo-600"
+                    className="bg-white focus:border-indigo-600 dark:bg-gray-900 mx-4 border border-indigo-600 px-8 py-4 outline-none focus:border-border-indigo-600"
                     name="year" id="year">
                     <option
                         className="text-indigo-600 font-bold dark:text-gray-100 uppercase text-left"
@@ -23,7 +23,7 @@ const EventsComponents = () => {
                 </select>
 
                 <select
-                    className="bg-white dark:bg-gray-900 mx-4 border border-indigo-600 focus:border-indigo-600 px-4 py-4
+                    className="bg-white dark:bg-gray-900 outline-none mx-4 border border-indigo-600 focus:border-indigo-600 px-4 py-4
                                 focus:border-border-indigo-600"
                     name="place" id="place">
                     <option
@@ -40,7 +40,7 @@ const EventsComponents = () => {
                 </select>
 
                 <select
-                    className="bg-white dark:bg-gray-900 mx-4 border border-indigo-600 focus:border-indigo-600 px-2 py-4
+                    className="bg-white dark:bg-gray-900 outline-none mx-4 border border-indigo-600 focus:border-indigo-600 px-2 py-4
                                 focus:border-border-indigo-600"
                     name="type" id="type">
                     <option

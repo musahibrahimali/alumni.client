@@ -9,9 +9,9 @@ const EventsPage = () => {
 
     const fetchEvents = () => {
         axios({
-            method: 'get',
-            url: "http://localhost:5000/events",
+            method: 'GET',
             withCredentials: true,
+            url: "http://localhost:5000/events",
         });
     }
 
