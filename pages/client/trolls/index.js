@@ -3,32 +3,24 @@ import { LinearWithValueLabel, MainHeader, NavBar, TrollsPage } from "../../../c
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import ClientLayout from '../../../layouts/ClientLayout';
+import { useSelector } from 'react-redux';
 
 const Trolls = () => {
     const router = useRouter();
-    const isAuthenticated = Cookies.get('user');
+    const user = useSelector((state) => state.user.user);
+
     useEffect(() => {
-        const redirectUser = () => {
-            if (!isAuthenticated) {
-                router.replace('/client/members');
-            }
-        };
-        redirectUser();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAuthenticated]);
+        if (!user) {
+            router.replace('/client/members');
+        }
+    });
 
     return (
         <>
             {/*default header (not navbar) */}
             <MainHeader />
             <NavBar />
-            {
-                isAuthenticated ?
-                    <TrollsPage /> :
-                    <div className="bg-events-color dark:bg-gray-900 flex justify-center items-center px-44 py-12 h-screen w-full">
-                        <LinearWithValueLabel />
-                    </div>
-            }
+            <TrollsPage />
         </>
     );
 }
