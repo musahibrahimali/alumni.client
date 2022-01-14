@@ -5,7 +5,6 @@ import { Facebook, Google } from '@mui/icons-material';
 import { LoginImage } from '../../../../../assets/assets';
 import { CheckBox } from '../../../../components';
 import axios from 'axios';
-// import GoogleButton from '../google/GoogleButton';
 
 const initialValues = {
     emailAddress: '',
@@ -20,11 +19,6 @@ function LogIn({ handleSwitch }) {
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter(); // router for route navigation
-
-    // google response
-    const responseGoogle = (response) => {
-        console.log(response);
-    }
 
     /* validate form */
     const validateForm = (fieldValues = values) => {
