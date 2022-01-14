@@ -2,21 +2,21 @@ import React from 'react';
 import Post from "./post/Post";
 import CreatePost from './post/CreatePost';
 import { useQuery } from 'react-query';
+import axios from 'axios';
 
 // fetch post with react-query
 const fetchTrolls = async () => {
-    const url = "http://localhost:5000/troll/all";
-    const response = await fetch(url, {
+    return await axios({
+        url: `http://localhost:5000/troll/all-trolls`,
         method: "GET",
+        withCredentials: true,
         headers: {
-            "Content-Type": "application/json",
-        }
+            "Accept": "application/json",
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        },
     });
-    const data = await response.json();
-    return data;
 };
-
-
 
 const MiddleContent = () => {
     // make the fetch only and only if user is not null
@@ -26,20 +26,20 @@ const MiddleContent = () => {
         {
             keepPreviousData: true,
             // refech ever 1 seconds
-            refetchInterval: 5000,
+            refetchInterval: 1000,
         }
     );
 
     return (
         <>
             {
-                <div className="flex-grow h-screen overflow-y-auto mx-8 px-4 pt-3">
+                <div className="mx-8 px-4 pt-3">
                     {/* create post */}
                     <CreatePost />
 
                     {/* post Section */}
                     {
-                        data && data.trolls.map((troll, index) => {
+                        data && data.data?.map((troll, index) => {
                             return (
                                 <Post
                                     key={index}

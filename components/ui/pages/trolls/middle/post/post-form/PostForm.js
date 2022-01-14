@@ -30,7 +30,7 @@ const PostForm = (props) => {
     const theme = useSelector((state) => state.theme.theme);
     // get user id from redux
     const user = useSelector((state) => state.user.user);
-    const userId = user?.userId;
+    const userId = user?._id;
 
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         maxFiles: 10, // max number of files
@@ -155,7 +155,7 @@ const PostForm = (props) => {
         } else {
             // add input to form data
             formData.append('post', input);
-            formData.append('userId', userId);
+            formData.append('user', userId);
             acceptedFiles.forEach((file) => {
                 if (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png" || file.type === "image/gif" || file.type === "image/bmp" || file.type === "image/svg+xml") {
                     formData.append('images', file, file.name);
@@ -169,10 +169,10 @@ const PostForm = (props) => {
                     });
                 }
             });
-            // console.log("from submit: ", formData.getAll('images'));
+            // console.log("from submit: ", formData.getAll('userId'));
             // create a new post
             const post = await createNewPost(formData);
-            if (post.status === 200) {
+            if (post.data) {
                 setNotify({
                     isOpen: true,
                     message: "Post created successfully",
@@ -181,7 +181,7 @@ const PostForm = (props) => {
                 removeMediaToPost();
                 setTimeout(() => {
                     setOpenPopUp(false);
-                }, 5000);
+                }, 2000);
             } else {
                 setNotify({
                     isOpen: true,
@@ -216,7 +216,7 @@ const PostForm = (props) => {
 
     return (
         <>
-            <div className="max-w[900px] xl:min-w[800px]">
+            <div className="w-full max-w[900px] xl:min-w[800px]">
                 <div className="w-full h-full flex flex-col justify-between">
                     {/* user and user audience status */}
                     <div className="flex flex-row justify-start items-center space-x-2 mb-4 w-full py-2 z-40">

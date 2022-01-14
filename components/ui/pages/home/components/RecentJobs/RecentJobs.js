@@ -58,7 +58,7 @@ const RecentJobs = () => {
 
                 </div>
                 <div className="w-full h-full p-4 mt-8 mb-4 flex justify-center items-center">
-                    <Link href="/allJobs">
+                    <Link href="/client/allJobs">
                         <a className="text-white bg-blue-600 font-bold uppercase px-8 py-2">
                             all job list
                         </a>

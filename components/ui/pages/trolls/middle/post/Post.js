@@ -6,11 +6,13 @@ import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfi
 import { Avatar } from '@mui/material';
 import moment from 'moment';
 import { commentOnPost, likePost } from '../../../../../utils/utils';
-import { InputField } from '../../../../../components';
+import { InputField, PopUp } from '../../../../../components';
 import { Picker } from 'emoji-mart';
+import PostWithCommentsForm from './post-details/PostWithComments';
 
 const Post = (props) => {
     const { isLoading, troll } = props;
+    const [openPopUp, setOpenPopUp] = useState(false);
     const [isAddComm, setIsAddComm] = useState(false);
     const [comment, setComment] = useState('');
     const [showEmojis, setShowEmojis] = useState(false); // show emojis
@@ -22,9 +24,14 @@ const Post = (props) => {
     const videos = troll?.videos;
     const date = moment(troll?.updatedAt).fromNow();
 
+    // close pop up
+    const handleOpenPopUP = () => {
+        setOpenPopUp(!openPopUp);
+    }
+
     // user
     const usr = useSelector((state) => state.user.user);
-    const userId = usr?.userId;
+    const userId = usr?._id;
 
     // get theme from redux with useSelector
     const theme = useSelector((state) => state.theme.theme);
@@ -34,8 +41,8 @@ const Post = (props) => {
         setComment(event.target.value);
     }
 
-    const onLikePost = () => {
-        likePost(troll?.trollId, userId);
+    const onLikePost = async () => {
+        await likePost(troll?._id, userId);
     }
 
     const onComment = () => {
@@ -63,8 +70,8 @@ const Post = (props) => {
 
     const onSubmitComment = async (event) => {
         event.preventDefault();
-        const addComment = await commentOnPost(troll?.trollId, comment, userId);
-        if (addComment.status === 200) {
+        const addComment = await commentOnPost(troll?._id, comment, userId);
+        if (addComment.data) {
             setComment('');
             onComment();
         }
@@ -103,7 +110,7 @@ const Post = (props) => {
                                 images && images.length === 1 ?
                                     <div className='px-2 py-1 overflow-hidden'>
                                         <Image
-                                            src={images[0].img}
+                                            src={images[0]}
                                             alt='postimage'
                                             width={1080}
                                             height={800}
@@ -117,7 +124,7 @@ const Post = (props) => {
                                                 return (
                                                     <div key={index} className='w-full h-full'>
                                                         <Image
-                                                            src={image.img}
+                                                            src={image}
                                                             alt='postimage'
                                                             className='w-full h-full'
                                                             width={1080}
@@ -139,7 +146,7 @@ const Post = (props) => {
                                 videos && videos.length === 1 ?
                                     <div className='px-2 py-1 overflow-hidden'>
                                         <video
-                                            src={videos[0].vid}
+                                            src={videos[0]}
                                             controls
                                             allowFullScreen
                                         />
@@ -150,7 +157,7 @@ const Post = (props) => {
                                                 return (
                                                     <div key={index} className='w-full h-full'>
                                                         <video
-                                                            src={video.vid}
+                                                            src={video}
                                                             controls
                                                             allowFullScreen
                                                         />
@@ -186,7 +193,7 @@ const Post = (props) => {
                                     </div>
                                 </div>
                                 {/* comments */}
-                                <div onClick={() => { }} className="cursor-pointer">
+                                <div onClick={handleOpenPopUP} className="cursor-pointer">
                                     <p className='text-gray-400 text-sm'>
                                         {comments} Comments
                                     </p>
@@ -300,6 +307,16 @@ const Post = (props) => {
                         </div>
                     </div>
             }
+
+            {/* post with comments */}
+            <PopUp
+                openPopUp={openPopUp}
+                setOpenPopUp={setOpenPopUp}
+                title={"Troll Comments"}>
+                <PostWithCommentsForm
+                    troll={troll}
+                />
+            </PopUp>
         </>
     );
 };

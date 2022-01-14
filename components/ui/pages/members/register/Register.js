@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { Facebook, Google } from '@mui/icons-material';
 import { LoginImage } from '../../../../../assets/assets';
-import { setUser } from '../../../../../provider/provider';
-import Cookies from 'js-cookie';
+import axios from 'axios';
 // initial values
 const initialValues = {
     firstName: '',
@@ -19,57 +17,34 @@ const Register = ({ handleSwitch }) => {
     const [errors, setErrors] = useState({}); // errors if any
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter(); // router for route navigation
-    const dispatch = useDispatch(); // dispatch to update the state
 
     // handle sign up request
     const handleSignUpRequest = async () => {
-        const response = await fetch('http://localhost:5000/users/signup', {
-            method: 'POST',
-            credentials: 'include',
+        const firstName = values.firstName;
+        const lastName = values.lastName;
+        const username = values.emailAddress;
+        const password = values.password;
+        const response = await axios({
+            url: `http://localhost:5000/client/register`,
+            method: "POST",
+            withCredentials: true,
             headers: {
+                "Accept": "application/json",
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify({
-                firstName: values.firstName,
-                lastName: values.lastName,
-                email: values.emailAddress,
-                password: values.password
+            data: JSON.stringify({
+                username,
+                password,
+                firstName,
+                lastName,
             }),
         });
-        const data = await response.json();
-        if (data.errors) {
-            setIsLog(false);
-            if (data.errors.email) {
-                setErrors({
-                    ...errors,
-                    emailAddress: data.errors.email
-                });
-            }
-
-            if (data.errors.password) {
-                setErrors({
-                    ...errors,
-                    password: data.errors.password
-                });
-            }
-            if (data.errors.firstName) {
-                setErrors({
-                    ...errors,
-                    firstName: data.errors.firstName
-                })
-            }
-            if (data.errors.lastName) {
-                setErrors({
-                    ...errors,
-                    lastName: data.errors.lastName
-                })
-            }
+        if (response.data.access_token) {
+            setIsLoading(false);
+            router.replace('/client/home');
         } else {
-            if (data.data) {
-                dispatch(setUser(data.data));
-                Cookies.set('user', true);
-                router.replace('/client/home');
-            }
+            setIsLoading(false);
         }
     }
 
@@ -110,14 +85,12 @@ const Register = ({ handleSwitch }) => {
 
     // facebook log in
     const FacebookLogin = async () => {
-        Cookies.set('user', true);
-        window.open('http://localhost:5000/users/facebook', '_self');
+        window.open('http://localhost:5000/client/facebook', '_self');
     }
 
     // google log in
     const GoogleLogin = async () => {
-        Cookies.set('user', true);
-        window.open('http://localhost:5000/users/google', '_self');
+        window.open('http://localhost:5000/client/google', '_self');
     }
 
     // handle form submission

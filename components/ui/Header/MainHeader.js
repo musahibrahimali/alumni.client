@@ -1,62 +1,62 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 import { useRouter } from "next/router";
 import { setUser } from "../../../provider/provider";
-import Cookies from 'js-cookie';
+import { useQuery } from 'react-query';
 
-const MainHeader = () => {
+// fetch user details
+const fetchUserProfile = async () => {
+    return await axios({
+        url: `http://localhost:5000/client/profile`,
+        method: "GET",
+        withCredentials: true,
+        headers: {
+            "Accept": "application/json",
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        },
+    });
+}
+
+const MainHeader = (props) => {
+    const { cookie } = props;
     const router = useRouter();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
-    const isAuthenticated = Cookies.get('user');
 
-    // handle log out
-    const handleLogOut = () => {
-        axios({
-            method: "get",
-            url: "http://localhost:5000/users/logout",
-            withCredentials: true,
-        }).then(() => {
-            dispatch(setUser(null));
-            Cookies.remove('user');
-            router.replace('/client/home').then(() => { });
-        }).catch(error => console.log(error));
+    const { data } = useQuery(
+        'user',
+        fetchUserProfile,
+        {
+            keepPreviousData: true,
+            enabled: !!cookie,
+        }
+    );
+
+    if (data) {
+        dispatch(setUser(data.data));
     }
 
-    useEffect(() => {
-        // fetch user details
-        const fetchUser = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/users/done', {
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Credentials": true,
-                    },
-                });
-                if (response.status === 200) {
-                    const data = await response.json();
-                    if (data.data) {
-                        dispatch(setUser(data.data));
-                    }
-                } else {
-                    Cookies.remove('user');
-                    return;
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        if (isAuthenticated) {
-            fetchUser();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAuthenticated]);
+    // handle log out
+    const handleLogOut = async () => {
+        await axios({
+            url: "http://localhost:5000/client/logout",
+            method: "GET",
+            withCredentials: true,
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        }).then(() => {
+            dispatch(setUser(null));
+            router.reload(window.location.pathname);
+            // router.replace('/client/members');
+        }).catch(error => console.log(error));
+    }
 
     return (
         <>
@@ -140,12 +140,12 @@ const MainHeader = () => {
                                 </div>
                             </div> :
                             <div> </div>
-
                     }
                 </div>
             </div>
         </>
     );
 }
+
 
 export default MainHeader;

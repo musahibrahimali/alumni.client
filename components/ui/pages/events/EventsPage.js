@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
-import axios from "axios";
+import React from 'react';
 import { HeroSection } from "../../../components";
 import EventsComponents from "./EventsComponents/EventsComponents";
+import { getEvents } from '../../../utils/utils';
+import { useQuery } from 'react-query';
 
 
 const EventsPage = () => {
-    const [page, setPage] = useState(1);
-
-    const fetchEvents = () => {
-        axios({
-            method: 'GET',
-            withCredentials: true,
-            url: "http://localhost:5000/events",
-        });
-    }
+    const { data, isLoading } = useQuery(
+        'events', getEvents,
+        {
+            keepPreviousData: true,
+        }
+    );
 
     return (
         <div>

@@ -1,7 +1,5 @@
 import React from 'react';
-import { createTheme } from '@mui/material';
 import { Footer, SettingsCog } from "../components/components";
-import { ThemeProvider } from '@mui/material/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useSelector } from "react-redux";

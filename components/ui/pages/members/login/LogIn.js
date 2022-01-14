@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { Facebook, Google } from '@mui/icons-material';
 import { LoginImage } from '../../../../../assets/assets';
 import { CheckBox } from '../../../../components';
-import { setUser } from '../../../../../provider/provider';
-import Cookies from 'js-cookie';
+import axios from 'axios';
+// import GoogleButton from '../google/GoogleButton';
 
 const initialValues = {
     emailAddress: '',
@@ -21,7 +20,11 @@ function LogIn({ handleSwitch }) {
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter(); // router for route navigation
-    const dispatch = useDispatch(); // dispatch to update the state
+
+    // google response
+    const responseGoogle = (response) => {
+        console.log(response);
+    }
 
     /* validate form */
     const validateForm = (fieldValues = values) => {
@@ -56,41 +59,27 @@ function LogIn({ handleSwitch }) {
 
     // handle sign in request
     const handleSignInRequest = async () => {
-        const email = values.emailAddress;
+        const username = values.emailAddress;
         const password = values.password;
-        const response = await fetch(`http://localhost:5000/users/login`, {
-            method: 'POST',
-            credentials: 'include',
+        const response = await axios({
+            url: `http://localhost:5000/client/login`,
+            method: "POST",
+            withCredentials: true,
             headers: {
-                'Content-Type': 'application/json'
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify({
-                email,
-                password
-            })
-        });
-        const data = await response.json();
-        if (data.errors) {
+            data: JSON.stringify({
+                username,
+                password,
+            }),
+        })
+        if (response.data.access_token) {
             setIsLoading(false);
-            if (data.errors.email) {
-                setErrors({
-                    ...errors,
-                    emailAddress: data.errors.email
-                });
-            }
-
-            if (data.errors.password) {
-                setErrors({
-                    ...errors,
-                    password: data.errors.password
-                });
-            }
+            router.replace('/client/home');
         } else {
-            if (data.data) {
-                dispatch(setUser(data.data));
-                Cookies.set('user', true);
-                router.replace('/client/home');
-            }
+            setIsLoading(false);
         }
     }
 
@@ -105,14 +94,12 @@ function LogIn({ handleSwitch }) {
 
     // facebook log in
     const FacebookLogin = async () => {
-        Cookies.set('user', true);
-        window.open('http://localhost:5000/users/facebook', '_self');
+        window.open('http://localhost:5000/client/facebook', '_self');
     }
 
     // google log in
     const GoogleLogin = async () => {
-        Cookies.set('user', true);
-        window.open('http://localhost:5000/users/google', '_self');
+        window.open('http://localhost:5000/client/google', '_self');
     }
 
     return (
@@ -213,6 +200,7 @@ function LogIn({ handleSwitch }) {
                             <Google />
                             <p className="mx-1 capitalize">Google</p>
                         </p>
+                        {/* <GoogleButton /> */}
                     </div>
                 </div>
             </div>

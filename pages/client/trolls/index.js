@@ -1,16 +1,25 @@
 import React, { useEffect } from 'react';
-import { LinearWithValueLabel, MainHeader, NavBar, TrollsPage } from "../../../components/components";
+import { MainHeader, NavBar, TrollsPage } from "../../../components/components";
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie';
 import ClientLayout from '../../../layouts/ClientLayout';
-import { useSelector } from 'react-redux';
 
-const Trolls = () => {
+export const getServerSideProps = async ({ req }) => {
+    let user = false;
+    const cookie = req.cookies['access_token'];
+    if (cookie !== undefined) {
+        user = true;
+    }
+    return {
+        props: { cookie: user },
+    }
+}
+
+const Trolls = (props) => {
+    const { cookie } = props;
     const router = useRouter();
-    const user = useSelector((state) => state.user.user);
 
     useEffect(() => {
-        if (!user) {
+        if (!cookie) {
             router.replace('/client/members');
         }
     });
@@ -18,7 +27,7 @@ const Trolls = () => {
     return (
         <>
             {/*default header (not navbar) */}
-            <MainHeader />
+            <MainHeader cookie={cookie} />
             <NavBar />
             <TrollsPage />
         </>

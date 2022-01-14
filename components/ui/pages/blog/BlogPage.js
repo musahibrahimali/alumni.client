@@ -1,15 +1,24 @@
 import React from 'react';
-import {HeroSection, PageNavigation, SearchBar} from "../../../components";
+import { useQuery } from 'react-query';
+import { HeroSection, PageNavigation, SearchBar } from "../../../components";
+import { getBlogs } from '../../../utils/utils';
 import BlogItem from "./BlogItem";
 import CategoryItem from "./CategoryItem";
 import PopularTag from "./PopularTag";
 
 function BlogPage() {
 
+    const { data, isLoading } = useQuery(
+        'blogs', getBlogs,
+        {
+            keepPreviousData: true,
+        }
+    );
+
     const handleOnChange = (event) => {
         event.preventDefault();
     }
-    
+
     return (
         <>
             <HeroSection
@@ -45,7 +54,7 @@ function BlogPage() {
                     <div className="col-span-2">
                         {/* search bar */}
                         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 mb-10 px-4 py-8 shadow-md flex justify-center items-center">
-                            <SearchBar title={"Search"} handleSearch={handleOnChange}  />
+                            <SearchBar title={"Search"} handleSearch={handleOnChange} />
                         </div>
 
                         {/* categories */}

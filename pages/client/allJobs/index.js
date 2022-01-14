@@ -1,18 +1,40 @@
 import React from 'react';
-import { LogoFour, LogoOne, LogoThree, LogoTwo } from "../../assets/assets";
+import { LogoFour, LogoOne, LogoThree, LogoTwo } from "../../../assets/assets";
 import { NavBar, JobCard, MainHeader, PageNavigation } from "../../../components/components";
 import ClientLayout from '../../../layouts/ClientLayout';
+import { getJobs } from '../../../components/utils/utils';
+import { useQuery } from 'react-query';
+
+export const getServerSideProps = async ({ req }) => {
+    let user = false;
+    const cookie = req.cookies['access_token'];
+    if (cookie !== undefined) {
+        user = true;
+    }
+    return {
+        props: { cookie: user },
+    }
+}
 
 const defaultText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit.Aliquid asperiores atque beatae dolor " +
     "dolorem esse et, iste labore minima minusnesciunt nobis officiis pariatur, recusandae rem sit tempore, totam voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid asperiores atque beatae dolor dolorem esse et, iste labore minima minus nesciunt nobis officiis pariatur, recusandae rem sit tempore, totam voluptatum."
 
-const AllJobList = () => {
+const AllJobList = (props) => {
+    const { cookie } = props;
+
+    const { data, isLoading } = useQuery(
+        'alljobs', getJobs,
+        {
+            keepPreviousData: true,
+        }
+    );
+
     return (
         <>
             {/*default header (not navbar) */}
-            <MainHeader />
+            <MainHeader cookie={cookie} />
             <NavBar />
-            <div className="flex flex-col h-full justify-between items-center px-4 py-6">
+            <div className="bg-white dark:bg-gray-900 flex flex-col h-full justify-between items-center px-4 py-6">
                 <div className="flex justify-center items-center p-8 mb-4">
                     <h1 className="text-xl uppercase md:text-4xl text-indigo-900 font-bold dark:text-gray-200">
                         Recent Jobs

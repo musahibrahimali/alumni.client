@@ -19,5 +19,8 @@ module.exports = {
       "images.unsplash.com",
     ],
   },
+  env: {
+    API_URL: 'http://localhost:5000'
+  },
   plugins: withPlugins([withVideos, {}]),
 }
