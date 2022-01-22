@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { MainHeader, NavBar, TrollsPage } from "../../../components/components";
+import { NavBar, TrollsPage } from "../../../components/components";
 import { useRouter } from 'next/router';
 import ClientLayout from '../../../layouts/ClientLayout';
 
@@ -27,7 +27,6 @@ const Trolls = (props) => {
     return (
         <>
             {/*default header (not navbar) */}
-            <MainHeader cookie={cookie} />
             <NavBar />
             <TrollsPage />
         </>
